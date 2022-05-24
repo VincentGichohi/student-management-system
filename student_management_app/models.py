@@ -148,3 +148,22 @@ class StudentResult(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
+
+#Creating Django Signals
+
+# It's like trigger in database. It will run only when Data is Added in CustomUser model
+
+@receiver(post_save, sender=CustomUser)
+# Now Creating a Function which will automatically insert data in HOD, Staff or Student
+def create_user_profile(sender, instance, created, **kwargs):
+    # if Created is true (Means Data Inserted)
+    if created:
+        # Check the user_type and insert the data in respective tables
+        if instance.user_type == 1:
+            AdminHOD.objects.create(admin=instance)
+        if instance.user_type == 2:
+            Staffs.objects.create(admin=instance)
+        if instance.user_type == 3:
+            Students.objects.create(admin=instance, course_id=Courses.objects.get(id=1), 
+                                    session_year_id=SessionYearModel.objects.get(id=1), 
+                                    address="", profile_pic="", gender="")
