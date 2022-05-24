@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
+from httplib2 import Http
 
 from student_management_app.EmailBackEnd import EmailBackEnd
 
@@ -31,4 +32,15 @@ def doLogin(request):
             
             else:
                 messages.error(request, 'Invalid login')
-                
+                return redirect('login')
+
+        else:
+            messages.error(request, 'Invalid login Credentials!')
+            return redirect('login')
+
+def get_user_detail(request):
+    if request.user != None:
+        return HttpResponse('User: ' +request.user.email+ " User Type: " +request.user.user_type)
+    else:
+        return HttpResponse('Please Login First')
+
