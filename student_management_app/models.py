@@ -167,3 +167,13 @@ def create_user_profile(sender, instance, created, **kwargs):
             Students.objects.create(admin=instance, course_id=Courses.objects.get(id=1), 
                                     session_year_id=SessionYearModel.objects.get(id=1), 
                                     address="", profile_pic="", gender="")
+
+
+@receiver(post_save, sender=CustomUser)
+def save_user_profile(sender, instance, **kwargs):
+    if instance.user_type == 1:
+        instance.adminhod.save()
+    if instance.user_type == 2:
+        instance.staffs.save()
+    if instance.user_type == 3:
+        instance.students.save()
