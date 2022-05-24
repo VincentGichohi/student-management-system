@@ -44,3 +44,6 @@ def get_user_detail(request):
     else:
         return HttpResponse('Please Login First')
 
+def logout_user(request):
+    logout(request)
+    return HttpResponseRedirect('/')
