@@ -102,3 +102,12 @@ def staff_apply_leave_save(request):
         except:
             messages.error(request, "Failed to Apply Leave")
             return redirect('staff_apply_leave')
+
+
+def staff_feedback(request):
+    staff_obj = Staffs.objects.get(admin=request.user.id)
+    feedback_data = FeedBackStaffs.objects.filter(staff_id=staff_obj)
+    context = {
+        "feedback_data":feedback_data
+    }
+    return render(request, "staff_template/staff_feedback_template.html", context)
