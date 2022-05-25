@@ -111,3 +111,20 @@ def staff_feedback(request):
         "feedback_data":feedback_data
     }
     return render(request, "staff_template/staff_feedback_template.html", context)
+
+def staff_feedback_save(request):
+    if request.method != "POST":
+        messages.error(request, "Invalid Method.")
+        return redirect('staff_feedback')
+    else:
+        feedback = request.POST.get('feedback_message')
+        staff_obj = Staffs.objects.get(admin=request.user.id)
+
+        try:
+            add_feedback = FeedBackStaffs(staff_id=staff_obj, feedback=feedback, feedback_reply="")
+            add_feedback.save()
+            messages.success(request, "Feedback Sent.")
+            return redirect('staff_feedback')
+        except:
+            messages.error(request, "Failed to Send Feedback.")
+            return redirect('staff_feedback')
