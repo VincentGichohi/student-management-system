@@ -124,3 +124,20 @@ def student_feedback(request):
         "feedback_data": feedback_data
     }
     return render(request, 'student_template/student_feedback.html', context)
+
+def student_feedback_save(request):
+    if request.method != "POST":
+        messages.error(request, "Invalid Method.")
+        return redirect('student_feedback')
+    else:
+        feedback = request.POST.get('feedback_message')
+        student_obj = Students.objects.get(admin=request.user.id)
+
+        try:
+            add_feedback = FeedBackStudent(student_id=student_obj, feedback=feedback, feedback_reply="")
+            add_feedback.save()
+            messages.success(request, "Feedback Sent.")
+            return redirect('student_feedback')
+        except:
+            messages.error(request, "Failed to Send Feedback.")
+            return redirect('student_feedback')
