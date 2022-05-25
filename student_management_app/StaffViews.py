@@ -75,3 +75,12 @@ def staff_take_attendance(request):
         "session_years": session_years
     }
     return render(request, "staff_template/take_attendance_template.html", context)
+
+
+def staff_apply_leave(request):
+    staff_obj = Staffs.objects.get(admin=request.user.id)
+    leave_data = LeaveReportStaff.objects.filter(staff_id=staff_obj)
+    context = {
+        "leave_data": leave_data
+    }
+    return render(request, "staff_template/staff_apply_leave_template.html", context)
