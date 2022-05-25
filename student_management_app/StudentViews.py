@@ -116,3 +116,11 @@ def student_apply_leave_save(request):
         except:
             messages.error(request, "Failed to Apply Leave")
             return redirect('student_apply_leave')
+
+def student_feedback(request):
+    student_obj = Students.objects.get(admin=request.user.id)
+    feedback_data = FeedBackStudent.objects.filter(student_id=student_obj)
+    context = {
+        "feedback_data": feedback_data
+    }
+    return render(request, 'student_template/student_feedback.html', context)
