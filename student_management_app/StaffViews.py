@@ -43,7 +43,7 @@ def staff_home(request):
         attendance_list.append(attendance_count1)
 
     students_attendance = Students.objects.filter(course_id__in=final_course)
-    student_list = &#91;]
+    student_list = []
     student_list_attendance_present = []
     student_list_attendance_absent = []
     for student in students_attendance:
@@ -65,3 +65,13 @@ def staff_home(request):
         "attendance_absent_list": student_list_attendance_absent
     }
     return render(request, "staff_template/staff_home_template.html", context)
+
+
+def staff_take_attendance(request):
+    subjects = Subjects.objects.filter(staff_id=request.user.id)
+    session_years = SessionYearModel.objects.all()
+    context = {
+        "subjects": subjects,
+        "session_years": session_years
+    }
+    return render(request, "staff_template/take_attendance_template.html", context)
