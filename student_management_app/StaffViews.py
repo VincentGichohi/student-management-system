@@ -84,3 +84,21 @@ def staff_apply_leave(request):
         "leave_data": leave_data
     }
     return render(request, "staff_template/staff_apply_leave_template.html", context)
+
+def staff_apply_leave_save(request):
+    if request.method != "POST":
+        messages.error(request, "Invalid Method")
+        return redirect('staff_apply_leave')
+    else:
+        leave_date = request.POST.get('leave_date')
+        leave_message = request.POST.get('leave_message')
+
+        staff_obj = Staffs.objects.get(admin=request.user.id)
+        try:
+            leave_report = LeaveReportStaff(staff_id=staff_obj, leave_date=leave_date, leave_message=leave_message, leave_status=0)
+            leave_report.save()
+            messages.success(request, "Applied for Leave.")
+            return redirect('staff_apply_leave')
+        except:
+            messages.error(request, "Failed to Apply Leave")
+            return redirect('staff_apply_leave')
