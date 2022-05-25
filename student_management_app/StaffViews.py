@@ -298,3 +298,12 @@ def staff_profile_update(request):
         except:
             messages.error(request, "Failed to Update Profile")
             return redirect('staff_profile')
+
+def staff_add_result(request):
+    subjects = Subjects.objects.filter(staff_id=request.user.id)
+    session_years = SessionYearModel.objects.all()
+    context = {
+        "subjects": subjects,
+        "session_years": session_years,
+    }
+    return render(request, "staff_template/add_result_template.html", context)
