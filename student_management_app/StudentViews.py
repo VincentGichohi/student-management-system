@@ -141,3 +141,14 @@ def student_feedback_save(request):
         except:
             messages.error(request, "Failed to Send Feedback.")
             return redirect('student_feedback')
+
+
+def student_profile(request):
+    user = CustomUser.objects.get(id=request.user.id)
+    student = Students.objects.get(admin=user)
+
+    context={
+        "user": user,
+        "student": student
+    }
+    return render(request, 'student_template/student_profile.html', context)
