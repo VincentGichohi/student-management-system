@@ -211,7 +211,7 @@ def get_attendance_dates(request):
     attendance = Attendance.objects.filter(subject_id=subject_model, session_year_id=session_model)
 
     # Only Passing Student Id and Student Name Only
-    list_data = &#91;]
+    list_data = []
 
     for attendance_single in attendance:
         data_small={"id":attendance_single.id, "attendance_date":str(attendance_single.attendance_date), "session_year_id":attendance_single.session_year_id.id}
@@ -227,7 +227,7 @@ def get_attendance_student(request):
 
     attendance_data = AttendanceReport.objects.filter(attendance_id=attendance)
     # Only Passing Student Id and Student Name Only
-    list_data = &#91;]
+    list_data = []
 
     for student in attendance_data:
         data_small={"id":student.student_id.admin.id, "name":student.student_id.admin.first_name+" "+student.student_id.admin.last_name, "status":student.status}
@@ -258,3 +258,14 @@ def update_attendance_data(request):
         return HttpResponse("OK")
     except:
         return HttpResponse("Error")
+
+
+def staff_profile(request):
+    user = CustomUser.objects.get(id=request.user.id)
+    staff = Staffs.objects.get(admin=user)
+
+    context={
+        "user": user,
+        "staff": staff
+    }
+    return render(request, 'staff_template/staff_profile.html', context)
