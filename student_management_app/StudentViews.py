@@ -19,7 +19,7 @@ def student_home(request):
     subject_name = []
     data_present = []
     data_absent = []
-    
+
     subject_data = Subjects.objects.filter(course_id=student_obj.course_id)
     for subject in subject_data:
         attendance = Attendance.objects.filter(subject_id=subject.id)
@@ -39,3 +39,14 @@ def student_home(request):
         "data_absent": data_absent
     }
     return render(request, "student_template/student_home_template.html", context)
+
+
+def student_view_attendance(request):
+    student = Students.objects.get(admin=request.user.id) # Getting Logged in Student Data
+    course = student.course_id # Getting Course Enrolled of LoggedIn Student
+    # course = Courses.objects.get(id=student.course_id.id) # Getting Course Enrolled of LoggedIn Student
+    subjects = Subjects.objects.filter(course_id=course) # Getting the Subjects of Course Enrolled
+    context = {
+        "subjects": subjects
+    }
+    return render(request, "student_template/student_view_attendance.html", context)
