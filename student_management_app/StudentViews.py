@@ -181,3 +181,12 @@ def student_profile_update(request):
         except:
             messages.error(request, "Failed to Update Profile")
             return redirect('student_profile')
+
+
+def student_view_result(request):
+    student = Students.objects.get(admin=request.user.id)
+    student_result = StudentResult.objects.filter(student_id=student.id)
+    context = {
+        "student_result": student_result,
+    }
+    return render(request, "student_template/student_view_result.html", context)
